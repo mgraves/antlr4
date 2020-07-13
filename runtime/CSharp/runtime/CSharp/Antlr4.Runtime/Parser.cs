@@ -106,7 +106,7 @@ namespace Antlr4.Runtime
         /// <summary>The input stream.</summary>
         /// <remarks>The input stream.</remarks>
         /// <seealso cref="InputStream()"/>
-    	private ITokenStream _input;
+    	protected ITokenStream _input;
 
 		private readonly List<int> _precedenceStack = new List<int> { 0 };
 
@@ -116,7 +116,7 @@ namespace Antlr4.Runtime
         /// object for the currently executing rule.
         /// This is always non-null during the parsing process.
         /// </summary>
-        private ParserRuleContext _ctx;
+        protected ParserRuleContext _ctx;
 
         /// <summary>
         /// Specifies whether or not the parser should construct a parse tree during

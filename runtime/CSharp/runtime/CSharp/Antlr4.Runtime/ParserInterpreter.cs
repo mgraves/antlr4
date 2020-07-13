@@ -8,6 +8,7 @@ using System.Linq;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Sharpen;
+using Tuple = System.Tuple;
 
 namespace Antlr4.Runtime
 {
@@ -41,7 +42,7 @@ namespace Antlr4.Runtime
         [NotNull]
         private readonly IVocabulary vocabulary;
 
-        private readonly Stack<Tuple<ParserRuleContext, int>> _parentContextStack = new Stack<Tuple<ParserRuleContext, int>>();
+        private readonly Stack<System.Tuple<ParserRuleContext, int>> _parentContextStack = new Stack<System.Tuple<ParserRuleContext, int>>();
 
         public ParserInterpreter(string grammarFileName, IVocabulary vocabulary, IEnumerable<string> ruleNames, ATN atn, ITokenStream input)
             : base(input)
@@ -134,7 +135,7 @@ namespace Antlr4.Runtime
                             if (startRuleStartState.isPrecedenceRule)
                             {
 								ParserRuleContext result = RuleContext;
-                                Tuple<ParserRuleContext, int> parentContext = _parentContextStack.Pop();
+                                System.Tuple<ParserRuleContext, int> parentContext = _parentContextStack.Pop();
                                 UnrollRecursionContexts(parentContext.Item1);
                                 return result;
                             }
@@ -285,7 +286,7 @@ namespace Antlr4.Runtime
             RuleStartState ruleStartState = _atn.ruleToStartState[p.ruleIndex];
             if (ruleStartState.isPrecedenceRule)
             {
-                Tuple<ParserRuleContext, int> parentContext = _parentContextStack.Pop();
+                System.Tuple<ParserRuleContext, int> parentContext = _parentContextStack.Pop();
                 UnrollRecursionContexts(parentContext.Item1);
                 State = parentContext.Item2;
             }

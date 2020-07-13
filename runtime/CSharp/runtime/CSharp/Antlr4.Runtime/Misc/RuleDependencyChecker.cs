@@ -15,6 +15,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Sharpen;
+using Tuple = System.Tuple;
 
 namespace Antlr4.Runtime.Misc
 {
@@ -31,7 +32,7 @@ namespace Antlr4.Runtime.Misc
             }
 
             IEnumerable<TypeInfo> typesToCheck = GetTypesToCheck(assembly);
-            List<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> dependencies = new List<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>();
+            ArrayList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> dependencies = new ArrayList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>();
             foreach (TypeInfo clazz in typesToCheck)
             {
                 dependencies.AddRange(GetDependencies(clazz));
@@ -39,20 +40,20 @@ namespace Antlr4.Runtime.Misc
 
             if (dependencies.Count > 0)
             {
-                IDictionary<TypeInfo, IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>> recognizerDependencies = new Dictionary<TypeInfo, IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>>();
-                foreach (Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency in dependencies)
+                IDictionary<Type, IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>> recognizerDependencies = new Dictionary<Type, IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>>();
+                foreach (System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency in dependencies)
                 {
                     TypeInfo recognizerType = dependency.Item1.Recognizer.GetTypeInfo();
-                    IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> list;
+                    IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> list;
                     if (!recognizerDependencies.TryGetValue(recognizerType, out list))
                     {
-                        list = new List<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>();
+                        list = new ArrayList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>();
                         recognizerDependencies[recognizerType] = list;
                     }
                     list.Add(dependency);
                 }
 
-                foreach (KeyValuePair<TypeInfo, IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>> entry in recognizerDependencies)
+                foreach (KeyValuePair<Type, IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>> entry in recognizerDependencies)
                 {
                     //processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("ANTLR 4: Validating {0} dependencies on rules in {1}.", entry.getValue().size(), entry.getKey().toString()));
                     CheckDependencies(entry.Value, entry.Key);
@@ -83,13 +84,13 @@ namespace Antlr4.Runtime.Misc
             }
         }
 
-        private static void CheckDependencies(IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> dependencies, TypeInfo recognizerType)
+        private static void CheckDependencies(IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> dependencies, Type recognizerType)
         {
             string[] ruleNames = GetRuleNames(recognizerType);
             int[] ruleVersions = GetRuleVersions(recognizerType, ruleNames);
             RuleDependencyChecker.RuleRelations relations = ExtractRuleRelations(recognizerType);
             StringBuilder errors = new StringBuilder();
-            foreach (Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency in dependencies)
+            foreach (System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency in dependencies)
             {
                 if (!dependency.Item1.Recognizer.GetTypeInfo().IsAssignableFrom(recognizerType))
                 {
@@ -180,7 +181,7 @@ namespace Antlr4.Runtime.Misc
 
         private static readonly Dependents ImplementedDependents = Dependents.Self | Dependents.Parents | Dependents.Children | Dependents.Ancestors | Dependents.Descendants;
 
-        private static void ReportUnimplementedDependents(StringBuilder errors, Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency, Dependents dependents)
+        private static void ReportUnimplementedDependents(StringBuilder errors, System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency, Dependents dependents)
         {
             Dependents unimplemented = dependents;
             unimplemented &= ~ImplementedDependents;
@@ -191,7 +192,7 @@ namespace Antlr4.Runtime.Misc
             }
         }
 
-        private static int CheckDependencyVersion(StringBuilder errors, Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency, string[] ruleNames, int[] ruleVersions, int relatedRule, string relation)
+        private static int CheckDependencyVersion(StringBuilder errors, System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider> dependency, string[] ruleNames, int[] ruleVersions, int relatedRule, string relation)
         {
             string ruleName = ruleNames[dependency.Item1.Rule];
             string path;
@@ -294,9 +295,9 @@ namespace Antlr4.Runtime.Misc
             return (string[])ruleNames.GetValue(null);
         }
 
-        public static IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> GetDependencies(TypeInfo clazz)
+        public static IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> GetDependencies(Type clazz)
         {
-            IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> result = new List<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>();
+            IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> result = new ArrayList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>>();
 
             GetElementDependencies(AsCustomAttributeProvider(clazz), result);
             foreach (ConstructorInfo ctor in clazz.DeclaredConstructors)
@@ -329,7 +330,7 @@ namespace Antlr4.Runtime.Misc
             return result;
         }
 
-        private static void GetElementDependencies(ICustomAttributeProvider annotatedElement, IList<Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> result)
+        private static void GetElementDependencies(ICustomAttributeProvider annotatedElement, IList<System.Tuple<RuleDependencyAttribute, ICustomAttributeProvider>> result)
         {
             foreach (RuleDependencyAttribute dependency in annotatedElement.GetCustomAttributes(typeof(RuleDependencyAttribute), true))
             {

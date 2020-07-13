@@ -10,6 +10,7 @@ using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Dfa;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Sharpen;
+using Tuple = System.Tuple;
 
 namespace Antlr4.Runtime.Atn
 {
@@ -482,8 +483,8 @@ namespace Antlr4.Runtime.Atn
 			//
 			// STATES
 			//
-			IList<Tuple<LoopEndState, int>> loopBackStateNumbers = new List<Tuple<LoopEndState, int>>();
-			IList<Tuple<BlockStartState, int>> endStateNumbers = new List<Tuple<BlockStartState, int>>();
+			IList<System.Tuple<LoopEndState, int>> loopBackStateNumbers = new List<System.Tuple<LoopEndState, int>>();
+			IList<System.Tuple<BlockStartState, int>> endStateNumbers = new List<System.Tuple<BlockStartState, int>>();
 			int nstates = ReadInt();
 			for (int i_1 = 0; i_1 < nstates; i_1++)
 			{
@@ -517,11 +518,11 @@ namespace Antlr4.Runtime.Atn
 				atn.AddState(s);
 			}
 			// delay the assignment of loop back and end states until we know all the state instances have been initialized
-			foreach (Tuple<LoopEndState, int> pair in loopBackStateNumbers)
+			foreach (System.Tuple<LoopEndState, int> pair in loopBackStateNumbers)
 			{
 				pair.Item1.loopBackState = atn.states[pair.Item2];
 			}
-			foreach (Tuple<BlockStartState, int> pair_1 in endStateNumbers)
+			foreach (System.Tuple<BlockStartState, int> pair_1 in endStateNumbers)
 			{
 				pair_1.Item1.endState = (BlockEndState)atn.states[pair_1.Item2];
 			}

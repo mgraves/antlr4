@@ -82,7 +82,7 @@ namespace Antlr4.Runtime.Atn
         [NotNull]
 		public DFA[] modeToDFA = new DFA[0];
 
-        protected internal readonly ConcurrentDictionary<int, int> LL1Table = new ConcurrentDictionary<int, int>();
+        protected internal readonly Sharpen.ConcurrentDictionary<int, int> LL1Table = new Sharpen.ConcurrentDictionary<int, int>();
 
         /// <summary>Used for runtime deserialization of ATNs from strings</summary>
         public ATN(ATNType grammarType, int maxTokenType)

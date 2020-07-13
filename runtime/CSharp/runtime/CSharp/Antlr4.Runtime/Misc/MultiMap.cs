@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Antlr4.Runtime.Sharpen;
+using Tuple = System.Tuple;
 
 namespace Antlr4.Runtime.Misc
 {
@@ -24,9 +25,9 @@ namespace Antlr4.Runtime.Misc
             elementsForKey.Add(value);
         }
 
-        public virtual IList<Tuple<K, V>> GetPairs()
+        public virtual IList<System.Tuple<K, V>> GetPairs()
         {
-            IList<Tuple<K, V>> pairs = new ArrayList<Tuple<K, V>>();
+            IList<System.Tuple<K, V>> pairs = new ArrayList<System.Tuple<K, V>>();
             foreach (KeyValuePair<K, IList<V>> pair in this)
             {
                 foreach (V value in pair.Value)
